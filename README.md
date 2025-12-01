@@ -2,6 +2,10 @@
 
 Small helper for generating Wi-Fi QR codes on OpenWrt.
 
+The initial development and testing was done on **OpenWrt 24.10+**
+using the official SDK (ramips/mt7621 target). Other recent
+OpenWrt releases should work as well, but are not explicitly tested.
+
 - CLI tool `wi-fi_qr` which generates SVG QR codes for all enabled Wi-Fi interfaces from UCI.
 - LuCI integration `luci-app-wi-fi_qr` which shows small QR icons on status pages and a large QR in an overlay.
 
