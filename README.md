@@ -70,7 +70,8 @@ Repository contains two OpenWrt packages:
 
    ```sh
    opkg install wi-fi_qr_*.ipk luci-app-wi-fi_qr_*.ipk
-   Packages are architecture-independent (Architecture: all), so one build
+
+Packages are architecture-independent (Architecture: all), so one build
 works on any target as long as dependencies are available for that device.
 
 Build from source (OpenWrt SDK)
