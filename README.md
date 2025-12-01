@@ -78,28 +78,14 @@ works on any target as long as dependencies are available for that device.
 
 1. Download and unpack the OpenWrt 24.10 SDK for your target.
 2. Clone this repository inside the SDK, for example:
-
-   ```sh
-   cd openwrt-sdk-*/   # your SDK root
-   git clone https://github.com/RazisID12/OpenWrt-Wi-Fi_QR.git package/wi-fi_qr
-   ```
-
-3. (Optional) Enable packages in `menuconfig`:
-
-   ```sh
-   make menuconfig
-   # Utilities  → wi-fi_qr
-   # LuCI       → Applications → luci-app-wi-fi_qr
-   ```
-
-4. Build packages:
+3. Build packages:
 
    ```sh
    make package/wi-fi_qr/compile V=sc
    make package/luci-app-wi-fi_qr/compile V=sc
    ```
 
-5. Resulting `.ipk` files will appear under `bin/packages/*/` inside the SDK.
+4. Resulting `.ipk` files will appear under `bin/packages/*/` inside the SDK.
    Copy them to the router and install via `opkg`.
 
 ---
