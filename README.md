@@ -70,3 +70,163 @@ Repository contains two OpenWrt packages:
 
    ```sh
    opkg install wi-fi_qr_*.ipk luci-app-wi-fi_qr_*.ipk
+   Packages are architecture-independent (Architecture: all), so one build
+works on any target as long as dependencies are available for that device.
+
+Build from source (OpenWrt SDK)
+
+Download and unpack the OpenWrt SDK for your target.
+
+Clone this repository inside the SDK, for example:
+
+cd openwrt-sdk-*/   # your SDK root
+git clone https://github.com/RazisID12/OpenWrt-Wi-Fi_QR.git package/wi-fi_qr
+
+
+(Optional) Enable packages in menuconfig:
+
+make menuconfig
+# Utilities  → wi-fi_qr
+# LuCI       → Applications → luci-app-wi-fi_qr
+
+
+Build packages:
+
+make package/wi-fi_qr/compile V=sc
+make package/luci-app-wi-fi_qr/compile V=sc
+
+
+Resulting .ipk files will appear under bin/packages/*/ inside the SDK.
+Copy them to the router and install via opkg.
+
+Command-line usage
+
+After installing wi-fi_qr, the CLI tool is available as wi-fi_qr in /usr/bin.
+
+Generate QR codes
+wi-fi_qr --gen
+
+
+What this does:
+
+Loads /etc/config/wireless via UCI.
+
+Enumerates all wifi-iface sections (@wifi-iface[0], @wifi-iface[1], …).
+
+Skips:
+
+disabled radios (wifi-device),
+
+disabled interfaces (wifi-iface with option disabled '1'),
+
+interfaces without SSID.
+
+For each active interface:
+
+detects encryption (nopass, WEP, WPA/WPA2/WPA3-PSK, etc.);
+
+fetches Wi-Fi key if needed;
+
+builds a Wi-Fi QR string in the standard format;
+
+runs qrencode to produce SVG;
+
+writes files into /www/wi-fi_qr/:
+
+/www/wi-fi_qr/id0_MyWiFi.svg
+/www/wi-fi_qr/id1_Guest_WiFi.svg
+...
+
+
+Temporary files *.svg.tmp are cleaned up automatically.
+
+You can then open a QR in any browser or QR app, for example:
+
+http://<router-ip>/wi-fi_qr/id0_MyWiFi.svg
+
+
+(If LuCI is installed, it will generate the same URLs internally.)
+
+Remove generated QR codes
+wi-fi_qr --del
+
+
+This command:
+
+Removes only files created by the tool:
+
+/www/wi-fi_qr/id*_*.svg
+
+/www/wi-fi_qr/id*_*.svg.tmp
+
+Leaves any other files in /www/wi-fi_qr untouched.
+
+If the directory becomes empty, removal scripts try to remove it on package uninstall.
+
+If you just want to regenerate QR codes, you can call --gen again:
+old SVG files will be cleaned and replaced with fresh ones.
+
+LuCI usage
+
+After installing luci-app-wi-fi_qr and reloading LuCI:
+
+Status → Overview → Wireless
+
+For each active Wi-Fi interface:
+
+original signal strength icon is moved into a small vertical stack,
+
+a mini QR icon is added next to it.
+
+Left click on the QR icon:
+
+opens a large QR in a centered overlay on a darkened background.
+
+Middle click on the QR icon:
+
+opens the underlying SVG (/cgi-bin/wi-fi_qr?...) in a new tab.
+
+Network → Wireless
+
+Inside the interface status column, a medium-size QR icon is added.
+
+Behaviour of mouse buttons is the same:
+
+left click → overlay,
+
+middle click → new tab.
+
+The LuCI package automatically patches the Bootstrap theme footer.ut to
+insert:
+
+<link rel="stylesheet" href="/luci-static/resources/wi-fi_qr.css">
+<script src="/luci-static/resources/wi-fi_qr.js"></script>
+
+
+On uninstall:
+
+this block is removed,
+
+the footer file is restored to its previous form.
+
+Uninstall
+
+To remove both CLI helper and LuCI integration:
+
+opkg remove luci-app-wi-fi_qr wi-fi_qr
+
+
+Removal scripts:
+
+clean generated SVG files in /www/wi-fi_qr,
+
+try to remove empty directories /www/wi-fi_qr and /usr/lib/wi-fi_qr,
+
+undo the LuCI footer modification.
+
+License
+
+This project is licensed under the MIT License.
+See the LICENSE
+
+file for details.
