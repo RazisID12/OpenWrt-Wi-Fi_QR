@@ -1,5 +1,6 @@
-# OpenWrt-Wi-Fi_QR
-Wi-Fi QR generator and LuCI integration for OpenWrt.
+# OpenWrt Wi-Fi QR
+
+Small helper for generating Wi-Fi QR codes on OpenWrt.
 
 - CLI tool `wi-fi_qr` which generates SVG QR codes for all enabled Wi-Fi interfaces from UCI.
 - LuCI integration `luci-app-wi-fi_qr` which shows small QR icons on status pages and a large QR in an overlay.
@@ -10,20 +11,31 @@ Wi-Fi QR generator and LuCI integration for OpenWrt.
 
 ## Features
 
-- Generates standard Wi-Fi QR codes in the form  
-  `WIFI:T:WPA;S:<ssid>;P:<password>;H:false;`
-- Supports:
-  - open / `nopass` networks,
-  - WEP,
-  - WPA/WPA2/WPA3-PSK (anything that maps to `psk*` in UCI).
-- Output format: **SVG** with a clean border and SSID caption.
-- Per-interface files `idN_<safe-ssid>.svg` in `/www/wi-fi_qr/`.
-- LuCI integration:
-  - **Status → Overview → Wireless**: mini QR icon next to signal strength.
-  - **Network → Wireless**: medium QR icon inside interface status cell.
-  - Left click — big QR in an overlay, middle click — open QR in a new tab.
+**CLI (`wi-fi_qr`):**
 
-All code is shell + JavaScript + CSS, no compiled binaries. Package is marked as `PKGARCH:=all`.
+- Reads `wireless` config from UCI.
+- Skips disabled radios and interfaces.
+- Detects encryption type and password (including `nopass`).
+- Generates standard Wi-Fi QR strings, for example:  
+  `WIFI:T:WPA;S:<ssid>;P:<password>;H:false;`
+- Writes SVG files to `/www/wi-fi_qr`:
+  - one file per Wi-Fi interface: `idN_<safe-ssid>.svg`;
+  - SVG already contains a clean border and SSID caption.
+
+**LuCI (`luci-app-wi-fi_qr`):**
+
+- **Status → Overview → Wireless**
+  - Mini QR icon next to signal strength badge for each active interface.
+- **Network → Wireless**
+  - Medium QR icon inside interface status cell.
+- Mouse actions:
+  - **Left click** – open large QR in a full-screen overlay.
+  - **Middle click (wheel)** – open the same SVG in a new tab.
+- Automatically injects `wi-fi_qr.js` and `wi-fi_qr.css` into the Bootstrap theme footer.
+- On uninstall, restores the original footer.
+
+All code is shell + JavaScript + CSS, no compiled binaries.  
+Packages are marked as `PKGARCH:=all`.
 
 ---
 
