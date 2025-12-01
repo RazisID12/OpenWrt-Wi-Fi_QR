@@ -4,7 +4,7 @@ Wi-Fi QR generator and LuCI integration for OpenWrt.
 - CLI tool `wi-fi_qr` which generates SVG QR codes for all enabled Wi-Fi interfaces from UCI.
 - LuCI integration `luci-app-wi-fi_qr` which shows small QR icons on status pages and a large QR in an overlay.
 
-> Проект распространяется под лицензией MIT.
+> This project is licensed under the MIT License.
 
 ---
 
