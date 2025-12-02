@@ -32,9 +32,6 @@ OpenWrt releases should work as well, but are not explicitly tested.
   - Mini QR icon next to signal strength badge for each active interface.
 - **Network → Wireless**
   - Medium QR icon inside interface status cell.
-- Mouse actions:
-  - **Left click** – open large QR in a full-screen overlay.
-  - **Middle click (wheel)** – open the same SVG in a new tab.
 - Automatically injects `wi-fi_qr.js` and `wi-fi_qr.css` into the Bootstrap theme footer.
 - On uninstall, restores the original footer.
 
